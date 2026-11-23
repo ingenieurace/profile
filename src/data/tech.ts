@@ -10,7 +10,7 @@ export type Platform = (typeof PLATFORMS)[number];
 export interface Tech {
   slug: string;
   name: string;
-  category: 'Languages' | 'Data' | 'Infrastructure' | 'Observability' | 'Server' | 'Client' | 'Embedded' | 'AI';
+  category: 'Languages' | 'Data' | 'Infrastructure' | 'Server' | 'Client' | 'Embedded' | 'AI';
   /**
    * Which sub-tab a Client entry sits under on the stack page. Required for
    * Client, ignored elsewhere. Empty platforms are not shown.
@@ -467,60 +467,6 @@ export const TECH: Tech[] = [
         '`worker_processes auto` 会为每个 CPU 核心启动一个 worker',
         'upstream 块中的 `keepalive` 复用到后端的连接，减少建立连接的开销',
         '`nginx -t` 检查配置，`nginx -s reload` 在不中断现有连接的情况下应用新配置',
-      ],
-    },
-  },
-  {
-    slug: 'prometheus',
-    name: 'Prometheus',
-    category: 'Observability',
-    tagline: 'A monitoring system that scrapes metrics over HTTP and stores them as time series.',
-    understanding: [
-      'Prometheus pulls metrics from targets at a fixed interval and stores each series, identified by a metric name and a set of labels, in a local time-series database. PromQL queries, aggregates and computes rates over those series, and alerting rules are written in PromQL as well.',
-      'Applications expose metrics through client libraries; exporters do the same for systems such as Linux hosts, databases and proxies. Alertmanager groups and routes alerts. For long-term or global storage, Thanos, Cortex, Mimir and VictoriaMetrics extend it.',
-    ],
-    points: [
-      'Every distinct combination of label values is a separate series, so labels such as user ID or request ID multiply storage and memory use',
-      '`rate()` on a counter gives a per-second rate and handles counter resets',
-      'Histograms record values in buckets, and `histogram_quantile()` estimates percentiles across instances',
-    ],
-    zh: {
-      tagline: '一个监控系统，通过 HTTP 抓取指标，存储为时间序列。',
-      understanding: [
-        'Prometheus 按固定间隔从目标拉取指标，把每条序列（由指标名和一组标签标识）存入本地时序数据库。PromQL 用于查询、聚合和计算速率，告警规则也用 PromQL 编写。',
-        '应用通过客户端库暴露指标；exporter 则为 Linux 主机、数据库、代理等系统暴露指标。Alertmanager 负责告警的分组和路由。需要长期或全局存储时，可以用 Thanos、Cortex、Mimir 和 VictoriaMetrics 扩展它。',
-      ],
-      points: [
-        '每一种不同的标签值组合都是一条独立序列，因此用户 ID、请求 ID 这类标签会成倍增加存储和内存占用',
-        '对 counter 使用 `rate()` 得到每秒速率，并且能正确处理计数器重置',
-        'histogram 把数值记录到桶中，`histogram_quantile()` 可以跨实例估算分位数',
-      ],
-    },
-  },
-  {
-    slug: 'grafana',
-    name: 'Grafana',
-    category: 'Observability',
-    tagline: 'A dashboard and visualisation tool that queries many data sources in one place.',
-    understanding: [
-      'Grafana connects to data sources such as Prometheus, Loki, Tempo, Elasticsearch, ClickHouse and SQL databases, and renders their query results as panels on dashboards. Variables let one dashboard switch between services, clusters or environments.',
-      'It also handles alerting, and links metrics, logs and traces so a panel can jump to the related logs or trace for the same time range. Dashboards are stored as JSON and can be provisioned from files or managed through its API.',
-    ],
-    points: [
-      'RED (rate, errors, duration) describes request-driven services, and USE (utilisation, saturation, errors) describes resources',
-      'Data links and exemplars connect a metric panel to the matching logs and traces',
-      'Provisioning dashboards from version-controlled JSON keeps them reviewable and reproducible',
-    ],
-    zh: {
-      tagline: '一个仪表盘和可视化工具，在同一处查询多种数据源。',
-      understanding: [
-        'Grafana 连接 Prometheus、Loki、Tempo、Elasticsearch、ClickHouse 和各种 SQL 数据库等数据源，把查询结果渲染成仪表盘上的面板。变量让同一个仪表盘可以在不同服务、集群或环境之间切换。',
-        '它也负责告警，并把指标、日志和链路关联起来，面板可以跳转到同一时间段的相关日志或链路。仪表盘以 JSON 存储，可以从文件预置，也可以通过 API 管理。',
-      ],
-      points: [
-        'RED（速率、错误、时延）用于描述请求驱动的服务，USE（使用率、饱和度、错误）用于描述资源',
-        'data link 和 exemplar 把指标面板和对应的日志、链路连接起来',
-        '用版本控制中的 JSON 预置仪表盘，便于审查，也能复现',
       ],
     },
   },
