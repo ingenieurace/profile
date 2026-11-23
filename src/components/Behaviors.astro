@@ -187,29 +187,39 @@
     //
     // A group is [data-tabs] holding a [data-tablist] of [data-tab] links, each
     // pointing by href at the [data-tab-panel] with the same value.
+    //
+    // Groups can nest (Client on the stack page holds its own platform tabs),
+    // so a group only ever touches the tabs and panels it owns directly.
+    function owned(group: HTMLElement, selector: string): HTMLElement[] {
+      return Array.from(group.querySelectorAll<HTMLElement>(selector)).filter(
+        (el) => el.parentElement?.closest('[data-tabs]') === group,
+      );
+    }
+
     function selectTab(tab: HTMLElement) {
       const group = tab.closest<HTMLElement>('[data-tabs]');
       if (!group) return;
-      group.querySelectorAll<HTMLElement>('[data-tab]').forEach((item) => {
+      owned(group, '[data-tab]').forEach((item) => {
         const selected = item === tab;
         item.setAttribute('aria-selected', String(selected));
         item.tabIndex = selected ? 0 : -1;
       });
-      group.querySelectorAll<HTMLElement>('[data-tab-panel]').forEach((panel) => {
+      owned(group, '[data-tab-panel]').forEach((panel) => {
         panel.hidden = panel.dataset.tabPanel !== tab.dataset.tab;
       });
     }
 
     function initTabs() {
       document.querySelectorAll<HTMLElement>('[data-tabs]').forEach((group) => {
-        const tabs = Array.from(group.querySelectorAll<HTMLElement>('[data-tab]'));
-        group.querySelector('[data-tablist]')?.setAttribute('role', 'tablist');
+        const tabs = owned(group, '[data-tab]');
+        owned(group, '[data-tablist]')[0]?.setAttribute('role', 'tablist');
         tabs.forEach((tab) => {
           tab.setAttribute('role', 'tab');
           const panelId = tab.getAttribute('href')?.slice(1);
           if (panelId) tab.setAttribute('aria-controls', panelId);
         });
-        group.querySelectorAll<HTMLElement>('[data-tab-panel]').forEach((panel) => {
+        const panels = owned(group, '[data-tab-panel]');
+        panels.forEach((panel) => {
           panel.setAttribute('role', 'tabpanel');
           const owner = tabs.find((tab) => tab.dataset.tab === panel.dataset.tabPanel);
           if (owner?.id) panel.setAttribute('aria-labelledby', owner.id);
@@ -217,6 +227,11 @@
         });
         const active = tabs.find((tab) => tab.getAttribute('aria-selected') === 'true')
           ?? tabs.find((tab) => tab.getAttribute('href') === window.location.hash)
+          // A hash naming a nested panel opens the outer tab that contains it.
+          ?? tabs.find((tab) => {
+            const panel = panels.find((p) => p.dataset.tabPanel === tab.dataset.tab);
+            return !!window.location.hash && !!panel?.querySelector(window.location.hash);
+          })
           ?? tabs[0];
         if (active) selectTab(active);
         group.dataset.tabsReady = '';
@@ -231,7 +246,7 @@
     document.addEventListener('keydown', (event) => {
       const tab = (event.target as HTMLElement | null)?.closest<HTMLElement>('[data-tab]');
       if (!tab) return;
-      const tabs = Array.from(tab.closest('[data-tabs]')!.querySelectorAll<HTMLElement>('[data-tab]'));
+      const tabs = owned(tab.closest<HTMLElement>('[data-tabs]')!, '[data-tab]');
       const index = tabs.indexOf(tab);
       let next: HTMLElement | undefined;
       if (event.key === 'ArrowRight') next = tabs[(index + 1) % tabs.length];

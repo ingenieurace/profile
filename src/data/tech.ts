@@ -4,10 +4,18 @@
  * logo is opened. Describe the technology plainly and factually: what it is,
  * how it works, where it is used. No set-up-and-knock-down contrasts.
  */
+export const PLATFORMS = ['Web', 'Apple', 'Android', 'Windows'] as const;
+export type Platform = (typeof PLATFORMS)[number];
+
 export interface Tech {
   slug: string;
   name: string;
   category: 'Languages' | 'Data' | 'Infrastructure' | 'Observability' | 'Client' | 'AI';
+  /**
+   * Which sub-tab a Client entry sits under on the stack page. Required for
+   * Client, ignored elsewhere. Empty platforms are not shown.
+   */
+  platform?: Platform;
   tagline: string;
   understanding: string[];
   points: string[];
@@ -102,33 +110,6 @@ export const TECH: Tech[] = [
     },
   },
   {
-    slug: 'typescript',
-    name: 'TypeScript',
-    category: 'Languages',
-    tagline: 'JavaScript with a static type system, compiled away before the code runs.',
-    understanding: [
-      'TypeScript adds type annotations, interfaces, generics and union types to JavaScript. The compiler checks them and emits plain JavaScript; the types do not exist at run time. Its type system is structural: two types are compatible when their shapes match.',
-      'It is the default for most large front-end and Node.js codebases, and editors use its language service for completion, navigation and refactoring. Type definitions for untyped libraries are published on DefinitelyTyped under `@types/*`.',
-    ],
-    points: [
-      '`strict` mode enables null checks and stricter inference, and is the usual setting for new projects',
-      'Discriminated unions with a literal `kind` field let the compiler narrow types inside `switch` and `if` branches',
-      'Data from the network or user input is unchecked at run time; libraries such as zod validate it and derive the static type from the schema',
-    ],
-    zh: {
-      tagline: '带静态类型系统的 JavaScript，类型在代码运行之前就被编译掉。',
-      understanding: [
-        'TypeScript 为 JavaScript 加入了类型标注、接口、泛型和联合类型。编译器检查这些类型并输出普通的 JavaScript；运行时不存在类型。它的类型系统是结构化的：两个类型的形状一致即可兼容。',
-        '它是大多数大型前端和 Node.js 项目的默认选择，编辑器借助它的语言服务实现补全、跳转和重构。没有类型的库，其类型定义发布在 DefinitelyTyped 的 `@types/*` 下。',
-      ],
-      points: [
-        '`strict` 模式会开启空值检查和更严格的推断，新项目通常默认开启',
-        '带字面量 `kind` 字段的可辨识联合，让编译器能在 `switch` 和 `if` 分支中收窄类型',
-        '来自网络或用户输入的数据在运行时没有检查；zod 等库负责校验，并从 schema 推导出静态类型',
-      ],
-    },
-  },
-  {
     slug: 'python',
     name: 'Python',
     category: 'Languages',
@@ -152,60 +133,6 @@ export const TECH: Tech[] = [
         '类型提示由 mypy、pyright 等工具检查，解释器本身会忽略它们',
         '`uv` 和 Poetry 管理虚拟环境和锁文件；锁文件让安装结果可复现',
         '`asyncio` 在单线程事件循环上运行协程，适合网络密集型服务',
-      ],
-    },
-  },
-  {
-    slug: 'swift',
-    name: 'Swift',
-    category: 'Languages',
-    tagline: "Apple's compiled language for iOS, macOS and the other Apple platforms.",
-    understanding: [
-      'Swift uses optionals to mark values that may be absent, value types (structs and enums) with copy semantics, and automatic reference counting for classes. Protocols with default implementations play the role that inheritance plays in many other languages.',
-      'Swift 5.5 added async/await and actors, and Swift 6 checks for data races at compile time under strict concurrency. Swift is open source and also runs on Linux and Windows, though most of its use is on Apple platforms with SwiftUI and UIKit.',
-    ],
-    points: [
-      'Structs and enums are copied on assignment; classes are shared by reference and counted with ARC',
-      '`guard let` and `if let` unwrap optionals safely; force-unwrapping with `!` traps at run time when the value is nil',
-      'Actors serialise access to their state, and `Sendable` marks types that can cross concurrency domains',
-    ],
-    zh: {
-      tagline: 'Apple 为 iOS、macOS 等自家平台推出的编译型语言。',
-      understanding: [
-        'Swift 用 Optional 标记可能缺失的值，struct 和 enum 等值类型采用复制语义，class 使用自动引用计数。带默认实现的协议，承担了许多其他语言中继承所承担的角色。',
-        'Swift 5.5 加入了 async/await 和 actor，Swift 6 在严格并发模式下于编译期检查数据竞争。Swift 是开源的，也能在 Linux 和 Windows 上运行，但主要用于 Apple 平台，配合 SwiftUI 和 UIKit。',
-      ],
-      points: [
-        'struct 和 enum 在赋值时复制；class 按引用共享，由 ARC 计数',
-        '`guard let` 和 `if let` 安全地解包 Optional；用 `!` 强制解包时，若值为 nil 会在运行时崩溃',
-        'actor 串行化对自身状态的访问，`Sendable` 标记可以跨并发域传递的类型',
-      ],
-    },
-  },
-  {
-    slug: 'kotlin',
-    name: 'Kotlin',
-    category: 'Languages',
-    tagline: 'A JVM language from JetBrains, the preferred language for Android development.',
-    understanding: [
-      'Kotlin runs on the JVM and interoperates fully with Java libraries. Its type system distinguishes nullable from non-null types, and it adds data classes, extension functions, smart casts and sealed classes. Google has listed it as the preferred language for Android since 2019.',
-      'Coroutines provide asynchronous code written in sequential style, with structured concurrency tying each coroutine to a scope. Kotlin also compiles to JavaScript and native code, and Kotlin Multiplatform shares code between Android, iOS, desktop and server.',
-    ],
-    points: [
-      'Values coming from Java have platform types (`String!`) whose nullability the compiler does not know',
-      'Coroutines launched in a lifecycle-bound scope, such as `viewModelScope`, are cancelled when that scope ends',
-      '`val` declares a read-only reference and `var` a mutable one; collections come in read-only and mutable interfaces',
-    ],
-    zh: {
-      tagline: 'JetBrains 推出的 JVM 语言，Android 开发的首选语言。',
-      understanding: [
-        'Kotlin 运行在 JVM 上，可以与 Java 类库完全互操作。它的类型系统区分可空类型和非空类型，并提供 data class、扩展函数、智能类型转换和 sealed class。自 2019 年起，Google 将它列为 Android 开发的首选语言。',
-        '协程让异步代码可以按顺序风格书写，结构化并发把每个协程绑定到一个 scope。Kotlin 也能编译为 JavaScript 和本地代码，Kotlin Multiplatform 可在 Android、iOS、桌面和服务端之间共享代码。',
-      ],
-      points: [
-        '来自 Java 的值带有平台类型（`String!`），编译器不知道它们是否可空',
-        '在绑定生命周期的 scope（如 `viewModelScope`）中启动的协程，会在该 scope 结束时被取消',
-        '`val` 声明只读引用，`var` 声明可变引用；集合分为只读接口和可变接口',
       ],
     },
   },
@@ -534,9 +461,38 @@ export const TECH: Tech[] = [
     },
   },
   {
+    slug: 'typescript',
+    name: 'TypeScript',
+    category: 'Client',
+    platform: 'Web',
+    tagline: 'JavaScript with a static type system, compiled away before the code runs.',
+    understanding: [
+      'TypeScript adds type annotations, interfaces, generics and union types to JavaScript. The compiler checks them and emits plain JavaScript; the types do not exist at run time. Its type system is structural: two types are compatible when their shapes match.',
+      'It is the default for most large front-end and Node.js codebases, and editors use its language service for completion, navigation and refactoring. Type definitions for untyped libraries are published on DefinitelyTyped under `@types/*`.',
+    ],
+    points: [
+      '`strict` mode enables null checks and stricter inference, and is the usual setting for new projects',
+      'Discriminated unions with a literal `kind` field let the compiler narrow types inside `switch` and `if` branches',
+      'Data from the network or user input is unchecked at run time; libraries such as zod validate it and derive the static type from the schema',
+    ],
+    zh: {
+      tagline: '带静态类型系统的 JavaScript，类型在代码运行之前就被编译掉。',
+      understanding: [
+        'TypeScript 为 JavaScript 加入了类型标注、接口、泛型和联合类型。编译器检查这些类型并输出普通的 JavaScript；运行时不存在类型。它的类型系统是结构化的：两个类型的形状一致即可兼容。',
+        '它是大多数大型前端和 Node.js 项目的默认选择，编辑器借助它的语言服务实现补全、跳转和重构。没有类型的库，其类型定义发布在 DefinitelyTyped 的 `@types/*` 下。',
+      ],
+      points: [
+        '`strict` 模式会开启空值检查和更严格的推断，新项目通常默认开启',
+        '带字面量 `kind` 字段的可辨识联合，让编译器能在 `switch` 和 `if` 分支中收窄类型',
+        '来自网络或用户输入的数据在运行时没有检查；zod 等库负责校验，并从 schema 推导出静态类型',
+      ],
+    },
+  },
+  {
     slug: 'react',
     name: 'React',
     category: 'Client',
+    platform: 'Web',
     tagline: 'A JavaScript library for building user interfaces from components.',
     understanding: [
       'A React component is a function that takes props and state and returns a description of the UI. When state changes, React re-renders the affected components and applies the differences to the DOM. Hooks such as `useState`, `useEffect` and `useContext` give function components state and side effects.',
@@ -561,63 +517,10 @@ export const TECH: Tech[] = [
     },
   },
   {
-    slug: 'nextjs',
-    name: 'Next.js',
-    category: 'Client',
-    tagline: 'A React framework from Vercel with routing, server rendering and API routes built in.',
-    understanding: [
-      'Next.js maps files in the `app` directory to routes and renders pages on the server, at build time, or on the client. In the App Router, components are React Server Components by default; components marked `\'use client\'` are also sent to the browser and hydrated.',
-      'Route handlers and Server Actions run server code inside the same project, and middleware runs before a request reaches a route. Fetch results and rendered pages can be cached and revalidated by time or on demand. It deploys to Vercel, to Node.js servers, or as a static export.',
-    ],
-    points: [
-      '`\'use client\'` marks the boundary where components start shipping JavaScript to the browser',
-      'Caching and revalidation are set per fetch or per route, with `revalidate`, `cache` and `revalidatePath`',
-      'Environment variables without the `NEXT_PUBLIC_` prefix stay on the server',
-    ],
-    zh: {
-      tagline: 'Vercel 推出的 React 框架，内置路由、服务端渲染和 API 路由。',
-      understanding: [
-        'Next.js 把 `app` 目录中的文件映射为路由，页面可以在服务端、构建时或客户端渲染。在 App Router 中，组件默认是 React Server Components；标记了 `\'use client\'` 的组件还会发送到浏览器并进行水合。',
-        'Route Handler 和 Server Action 在同一个项目里运行服务端代码，middleware 在请求到达路由之前执行。fetch 结果和渲染好的页面可以缓存，并按时间或按需重新验证。它可以部署到 Vercel、Node.js 服务器，或导出为静态站点。',
-      ],
-      points: [
-        '`\'use client\'` 标出组件开始向浏览器发送 JavaScript 的边界',
-        '缓存和重新验证按请求或按路由设置，使用 `revalidate`、`cache` 和 `revalidatePath`',
-        '没有 `NEXT_PUBLIC_` 前缀的环境变量只存在于服务端',
-      ],
-    },
-  },
-  {
-    slug: 'astro',
-    name: 'Astro',
-    category: 'Client',
-    tagline: 'A web framework for content sites that renders pages to HTML and ships no JavaScript by default.',
-    understanding: [
-      'Astro components render on the server or at build time and output HTML. Interactive components from React, Vue, Svelte or other frameworks are added as islands with `client:*` directives, and only those islands load JavaScript in the browser.',
-      'Content collections load Markdown, MDX or data files and validate their frontmatter against a schema. Astro builds static sites by default and supports server rendering through adapters. This site is built with Astro; its only client script runs the front-page typewriter and the stack dialogs.',
-    ],
-    points: [
-      '`client:load`, `client:idle` and `client:visible` control when an island hydrates',
-      'Content collection schemas use zod, so invalid frontmatter fails the build',
-      'Astro is built on Vite and uses Vite plugins and its dev server',
-    ],
-    zh: {
-      tagline: '一个面向内容站点的 Web 框架，把页面渲染为 HTML，默认不发送 JavaScript。',
-      understanding: [
-        'Astro 组件在服务端或构建时渲染，输出 HTML。React、Vue、Svelte 等框架的交互组件通过 `client:*` 指令作为「岛屿」加入页面，浏览器只为这些岛屿加载 JavaScript。',
-        '内容集合加载 Markdown、MDX 或数据文件，并按 schema 校验 frontmatter。Astro 默认构建静态站点，也可以通过适配器支持服务端渲染。这个网站就是用 Astro 构建的，唯一的客户端脚本负责首页的打字效果和技术栈弹层。',
-      ],
-      points: [
-        '`client:load`、`client:idle`、`client:visible` 控制岛屿的水合时机',
-        '内容集合的 schema 使用 zod，frontmatter 不合法时构建会失败',
-        'Astro 基于 Vite 构建，使用 Vite 的插件和开发服务器',
-      ],
-    },
-  },
-  {
     slug: 'tailwindcss',
     name: 'Tailwind CSS',
     category: 'Client',
+    platform: 'Web',
     tagline: 'A utility-first CSS framework that styles elements with small, single-purpose classes.',
     understanding: [
       'Tailwind provides classes such as `flex`, `px-4` and `text-sm`, each setting one or a few CSS properties from a design scale. Styles are written in the markup, and the build scans the source files and generates CSS only for the classes in use.',
@@ -645,6 +548,7 @@ export const TECH: Tech[] = [
     slug: 'vite',
     name: 'Vite',
     category: 'Client',
+    platform: 'Web',
     tagline: 'A front-end build tool with a fast dev server based on native ES modules.',
     understanding: [
       'In development, Vite serves source files to the browser as native ES modules and transforms each file when it is requested, with hot module replacement on save. Dependencies are pre-bundled once with esbuild. For production it bundles the application with Rollup, and newer versions with Rolldown.',
@@ -669,29 +573,58 @@ export const TECH: Tech[] = [
     },
   },
   {
-    slug: 'nodedotjs',
-    name: 'Node.js',
+    slug: 'bun',
+    name: 'Bun',
     category: 'Client',
-    tagline: 'A JavaScript runtime built on V8, used for servers and for front-end tooling.',
+    platform: 'Web',
+    tagline: 'A JavaScript runtime, package manager, bundler and test runner in one binary, built on JavaScriptCore.',
     understanding: [
-      'Node.js runs JavaScript outside the browser on Google\'s V8 engine. JavaScript executes on one thread with an event loop, and libuv handles file, network and timer I/O asynchronously, using a thread pool for operations the OS cannot do asynchronously.',
-      'It runs web servers and APIs with frameworks such as Express and Fastify, the server side of Next.js, and most front-end tooling: Vite, the TypeScript compiler, ESLint and package managers. npm is its package registry. Even-numbered releases become long-term support versions.',
+      'Bun runs JavaScript and TypeScript outside the browser on JavaScriptCore, the engine from WebKit, and is written mostly in Zig. TypeScript and JSX files run directly, with no separate compile step, and ES modules and CommonJS can be mixed in the same project.',
+      'It aims to be a drop-in replacement for Node.js: it implements most of the Node APIs and reads `package.json` and `node_modules` the same way. The same binary also installs packages (`bun install`, with a `bun.lock` lockfile), bundles code (`bun build`) and runs Jest-compatible tests (`bun test`). It also ships built-in APIs such as `Bun.serve` for HTTP and `bun:sqlite`.',
     ],
     points: [
-      'Synchronous or CPU-heavy work in a request handler blocks the event loop for all concurrent requests',
-      '`worker_threads` run CPU-bound code on separate threads',
-      'An `.nvmrc` file or the `engines` field in `package.json` records the Node version a project needs',
+      '`bun install` uses a global cache and links packages into `node_modules`, which makes installs considerably faster than npm',
+      '`bun --bun <script>` forces tools whose shebang names `node` to run on Bun instead',
+      'The `packageManager` field in `package.json` records the Bun version a project expects',
     ],
     zh: {
-      tagline: '基于 V8 的 JavaScript 运行时，用于服务端和前端工具链。',
+      tagline: '集 JavaScript 运行时、包管理器、打包器和测试运行器于一个二进制文件，基于 JavaScriptCore。',
       understanding: [
-        'Node.js 借助 Google 的 V8 引擎在浏览器之外运行 JavaScript。JavaScript 在单线程上配合事件循环执行，libuv 以异步方式处理文件、网络和定时器 I/O，对操作系统无法异步完成的操作使用线程池。',
-        '它用 Express、Fastify 等框架运行 Web 服务和 API，运行 Next.js 的服务端，也运行大部分前端工具：Vite、TypeScript 编译器、ESLint 和各种包管理器。npm 是它的包仓库。偶数版本会成为长期支持版本。',
+        'Bun 借助 WebKit 的 JavaScriptCore 引擎在浏览器之外运行 JavaScript 和 TypeScript，主体用 Zig 编写。TypeScript 和 JSX 文件可以直接运行，不需要单独的编译步骤，同一个项目里可以混用 ES 模块和 CommonJS。',
+        '它的目标是直接替换 Node.js：实现了大部分 Node API，读取 `package.json` 和 `node_modules` 的方式也相同。同一个二进制文件还负责安装依赖（`bun install`，锁文件为 `bun.lock`）、打包（`bun build`）和运行兼容 Jest 的测试（`bun test`）。它还内置了 `Bun.serve`（HTTP）和 `bun:sqlite` 等 API。',
       ],
       points: [
-        '请求处理中的同步操作或 CPU 密集计算，会阻塞事件循环，影响所有并发请求',
-        '`worker_threads` 在独立线程上运行 CPU 密集的代码',
-        '`.nvmrc` 文件或 `package.json` 中的 `engines` 字段记录项目需要的 Node 版本',
+        '`bun install` 使用全局缓存并把包链接进 `node_modules`，安装速度明显快于 npm',
+        '`bun --bun <script>` 让 shebang 写着 `node` 的工具改由 Bun 运行',
+        '`package.json` 中的 `packageManager` 字段记录项目需要的 Bun 版本',
+      ],
+    },
+  },
+  {
+    slug: 'swift',
+    name: 'Swift',
+    category: 'Client',
+    platform: 'Apple',
+    tagline: "Apple's compiled language for iOS, macOS and the other Apple platforms.",
+    understanding: [
+      'Swift uses optionals to mark values that may be absent, value types (structs and enums) with copy semantics, and automatic reference counting for classes. Protocols with default implementations play the role that inheritance plays in many other languages.',
+      'Swift 5.5 added async/await and actors, and Swift 6 checks for data races at compile time under strict concurrency. Swift is open source and also runs on Linux and Windows, though most of its use is on Apple platforms with SwiftUI and UIKit.',
+    ],
+    points: [
+      'Structs and enums are copied on assignment; classes are shared by reference and counted with ARC',
+      '`guard let` and `if let` unwrap optionals safely; force-unwrapping with `!` traps at run time when the value is nil',
+      'Actors serialise access to their state, and `Sendable` marks types that can cross concurrency domains',
+    ],
+    zh: {
+      tagline: 'Apple 为 iOS、macOS 等自家平台推出的编译型语言。',
+      understanding: [
+        'Swift 用 Optional 标记可能缺失的值，struct 和 enum 等值类型采用复制语义，class 使用自动引用计数。带默认实现的协议，承担了许多其他语言中继承所承担的角色。',
+        'Swift 5.5 加入了 async/await 和 actor，Swift 6 在严格并发模式下于编译期检查数据竞争。Swift 是开源的，也能在 Linux 和 Windows 上运行，但主要用于 Apple 平台，配合 SwiftUI 和 UIKit。',
+      ],
+      points: [
+        'struct 和 enum 在赋值时复制；class 按引用共享，由 ARC 计数',
+        '`guard let` 和 `if let` 安全地解包 Optional；用 `!` 强制解包时，若值为 nil 会在运行时崩溃',
+        'actor 串行化对自身状态的访问，`Sendable` 标记可以跨并发域传递的类型',
       ],
     },
   },
@@ -699,6 +632,7 @@ export const TECH: Tech[] = [
     slug: 'swiftui',
     name: 'SwiftUI',
     category: 'Client',
+    platform: 'Apple',
     tagline: "Apple's declarative UI framework for building interfaces in Swift across its platforms.",
     understanding: [
       'A SwiftUI view is a struct whose `body` describes the interface for the current state. When state changes, SwiftUI recomputes the affected views and updates the screen. One codebase can target iOS, iPadOS, macOS, watchOS, tvOS and visionOS.',
@@ -719,6 +653,230 @@ export const TECH: Tech[] = [
         '`@State` 保存单个视图自有的状态，`@Observable` 模型保存多个视图共享的状态',
         '很多 API 依赖最低系统版本，每个修饰符的文档中都标明了版本要求',
         '`UIViewRepresentable` 和 `UIHostingController` 分别用于在 SwiftUI 中嵌入 UIKit 视图、在 UIKit 中嵌入 SwiftUI 视图',
+      ],
+    },
+  },
+  {
+    slug: 'xcode',
+    name: 'Xcode',
+    category: 'Client',
+    platform: 'Apple',
+    tagline: "Apple's IDE for building, testing and shipping apps on its platforms.",
+    understanding: [
+      'Xcode bundles the editor, the Swift and Clang compilers, the SDKs for iOS, iPadOS, macOS, watchOS, tvOS and visionOS, and the simulators for each. Projects are organised into targets and schemes, and build settings decide how each target is compiled, signed and packaged.',
+      'It includes Interface Builder and SwiftUI previews for laying out views, the LLDB debugger, XCTest and Swift Testing for unit and UI tests, and Instruments for profiling CPU, memory, energy and rendering. Apps are archived and uploaded to App Store Connect from the Organizer; it runs only on macOS.',
+    ],
+    points: [
+      'Code signing ties a build to a team, a certificate and a provisioning profile; automatic signing manages these for most projects',
+      'Swift Package Manager is built in, and packages are added to a project from their repository URL',
+      '`xcodebuild` runs builds and tests from the command line, which is how CI services drive Xcode',
+    ],
+    zh: {
+      tagline: 'Apple 的 IDE，用于在其各个平台上构建、测试和发布应用。',
+      understanding: [
+        'Xcode 集成了编辑器、Swift 和 Clang 编译器、iOS、iPadOS、macOS、watchOS、tvOS、visionOS 的 SDK 以及各平台的模拟器。项目由 target 和 scheme 组织，构建设置决定每个 target 如何编译、签名和打包。',
+        '它包含用于布局界面的 Interface Builder 和 SwiftUI 预览、LLDB 调试器、用于单元测试和 UI 测试的 XCTest 与 Swift Testing，以及分析 CPU、内存、能耗和渲染的 Instruments。应用在 Organizer 中归档并上传到 App Store Connect；它只能在 macOS 上运行。',
+      ],
+      points: [
+        '代码签名把一次构建与开发团队、证书和描述文件绑定在一起；大多数项目可以交给自动签名管理',
+        '内置 Swift Package Manager，通过仓库 URL 即可把包加入项目',
+        '`xcodebuild` 在命令行中执行构建和测试，CI 服务就是通过它来驱动 Xcode 的',
+      ],
+    },
+  },
+  {
+    slug: 'kotlin',
+    name: 'Kotlin',
+    category: 'Client',
+    platform: 'Android',
+    tagline: 'A JVM language from JetBrains, the preferred language for Android development.',
+    understanding: [
+      'Kotlin runs on the JVM and interoperates fully with Java libraries. Its type system distinguishes nullable from non-null types, and it adds data classes, extension functions, smart casts and sealed classes. Google has listed it as the preferred language for Android since 2019.',
+      'Coroutines provide asynchronous code written in sequential style, with structured concurrency tying each coroutine to a scope. Kotlin also compiles to JavaScript and native code, and Kotlin Multiplatform shares code between Android, iOS, desktop and server.',
+    ],
+    points: [
+      'Values coming from Java have platform types (`String!`) whose nullability the compiler does not know',
+      'Coroutines launched in a lifecycle-bound scope, such as `viewModelScope`, are cancelled when that scope ends',
+      '`val` declares a read-only reference and `var` a mutable one; collections come in read-only and mutable interfaces',
+    ],
+    zh: {
+      tagline: 'JetBrains 推出的 JVM 语言，Android 开发的首选语言。',
+      understanding: [
+        'Kotlin 运行在 JVM 上，可以与 Java 类库完全互操作。它的类型系统区分可空类型和非空类型，并提供 data class、扩展函数、智能类型转换和 sealed class。自 2019 年起，Google 将它列为 Android 开发的首选语言。',
+        '协程让异步代码可以按顺序风格书写，结构化并发把每个协程绑定到一个 scope。Kotlin 也能编译为 JavaScript 和本地代码，Kotlin Multiplatform 可在 Android、iOS、桌面和服务端之间共享代码。',
+      ],
+      points: [
+        '来自 Java 的值带有平台类型（`String!`），编译器不知道它们是否可空',
+        '在绑定生命周期的 scope（如 `viewModelScope`）中启动的协程，会在该 scope 结束时被取消',
+        '`val` 声明只读引用，`var` 声明可变引用；集合分为只读接口和可变接口',
+      ],
+    },
+  },
+  {
+    slug: 'gradle',
+    name: 'Gradle',
+    category: 'Client',
+    platform: 'Android',
+    tagline: 'A build tool for the JVM, and the build system behind every Android project.',
+    understanding: [
+      'Gradle builds are described in scripts, written today mostly in the Kotlin DSL (`build.gradle.kts`). A build is a graph of tasks such as compiling, testing and packaging; Gradle works out the order from their dependencies and skips any task whose inputs and outputs have not changed since the last run.',
+      'Plugins add the tasks for a given kind of project. The Android Gradle Plugin turns Kotlin sources and resources into APKs and App Bundles, with build types (debug, release) and product flavours for variants of the same app. Android Studio syncs its project model from the Gradle build.',
+    ],
+    points: [
+      'The Gradle Wrapper (`gradlew`) pins the Gradle version per project, so every machine and CI runner builds with the same one',
+      'Version catalogs (`libs.versions.toml`) keep dependency coordinates and versions in one file shared across modules',
+      'The build cache and configuration cache reuse earlier task outputs and the configured task graph to shorten repeat builds',
+    ],
+    zh: {
+      tagline: '面向 JVM 的构建工具，也是所有 Android 项目背后的构建系统。',
+      understanding: [
+        'Gradle 的构建用脚本描述，如今大多使用 Kotlin DSL（`build.gradle.kts`）编写。一次构建是由编译、测试、打包等任务组成的图；Gradle 根据依赖关系确定执行顺序，输入和输出自上次运行以来没有变化的任务会被跳过。',
+        '插件为某类项目添加所需的任务。Android Gradle Plugin 把 Kotlin 源码和资源打包成 APK 与 App Bundle，并用构建类型（debug、release）和产品变种区分同一应用的不同版本。Android Studio 的项目模型就是从 Gradle 构建同步而来的。',
+      ],
+      points: [
+        'Gradle Wrapper（`gradlew`）为每个项目固定 Gradle 版本，所有机器和 CI 都用同一个版本构建',
+        '版本目录（`libs.versions.toml`）把依赖坐标和版本集中在一个文件里，供各模块共享',
+        '构建缓存和配置缓存复用之前的任务输出与已配置好的任务图，缩短重复构建的时间',
+      ],
+    },
+  },
+  {
+    slug: 'materialdesign',
+    name: 'Material Design 3',
+    category: 'Client',
+    platform: 'Android',
+    tagline: "Google's design system, with components, colour, type and motion guidelines for Android and the web.",
+    understanding: [
+      'Material Design 3, also called Material You, is the current version of the design system Google introduced in 2014. It specifies a set of components (buttons, app bars, navigation bars, cards, dialogs and so on) together with rules for layout, typography, shape, elevation and motion.',
+      'Its colour system derives a full palette of tonal roles, such as primary, secondary, surface and their "on" counterparts, from a single source colour. On Android 12 and later, dynamic colour can take that source from the user\'s wallpaper. Compose implements it in the `androidx.compose.material3` library, and there are implementations for Android Views, Flutter and the web.',
+    ],
+    points: [
+      'A `MaterialTheme` supplies the colour scheme, typography and shapes that every Material component in the tree reads',
+      'Colour roles come in pairs, such as `primary` and `onPrimary`, so text and icons keep their contrast against the surface beneath',
+      'The Material Theme Builder generates light and dark colour schemes from a source colour and exports them as code',
+    ],
+    zh: {
+      tagline: 'Google 的设计系统，为 Android 和 Web 提供组件，以及颜色、字体和动效规范。',
+      understanding: [
+        'Material Design 3 又称 Material You，是 Google 在 2014 年推出的设计系统的当前版本。它规定了一套组件（按钮、顶部应用栏、导航栏、卡片、对话框等），以及布局、字体、形状、层级和动效的规则。',
+        '它的颜色系统从单一的源颜色推导出整套色调角色，例如 primary、secondary、surface 以及对应的 “on” 色。在 Android 12 及以上版本，动态取色可以从用户的壁纸中提取这个源颜色。Compose 在 `androidx.compose.material3` 库中实现了它，Android View、Flutter 和 Web 也各有实现。',
+      ],
+      points: [
+        '`MaterialTheme` 提供颜色方案、字体和形状，树中的每个 Material 组件都从这里读取',
+        '颜色角色成对出现，例如 `primary` 与 `onPrimary`，让文字和图标与其下方的表面保持对比度',
+        'Material Theme Builder 能从一个源颜色生成浅色和深色两套方案，并导出为代码',
+      ],
+    },
+  },
+  {
+    slug: 'jetpackcompose',
+    name: 'Jetpack Compose',
+    category: 'Client',
+    platform: 'Android',
+    tagline: "Android's declarative UI toolkit, written in Kotlin.",
+    understanding: [
+      'In Compose, UI is built from composable functions: Kotlin functions marked `@Composable` that describe what the screen shows for the current state. When state they read changes, the runtime re-runs only the affected functions, a process called recomposition, and updates the view tree.',
+      'State is held with `remember` and `mutableStateOf`, or comes from a ViewModel as a `StateFlow`. Layout is done with `Row`, `Column`, `Box` and lazy lists, and appearance is adjusted through modifiers. Compose interoperates with the older Android View system in both directions, and Android Studio renders composables in previews.',
+    ],
+    points: [
+      'Composable functions may run often and in any order, so side effects belong in `LaunchedEffect`, `DisposableEffect` and similar APIs',
+      'State hoisting moves state up to the caller, which keeps composables stateless and easier to preview and test',
+      'Stable parameter types let the runtime skip recomposing functions whose inputs have not changed',
+    ],
+    zh: {
+      tagline: 'Android 的声明式 UI 工具包，用 Kotlin 编写。',
+      understanding: [
+        'Compose 用可组合函数构建界面：这些是标注了 `@Composable` 的 Kotlin 函数，描述当前状态下屏幕显示什么。它们读取的状态发生变化时，运行时只重新执行受影响的函数（称为重组），并更新视图树。',
+        '状态通过 `remember` 和 `mutableStateOf` 保存，或者以 `StateFlow` 的形式来自 ViewModel。布局用 `Row`、`Column`、`Box` 和惰性列表完成，外观通过 modifier 调整。Compose 与旧的 Android View 系统可以双向互通，Android Studio 能在预览中渲染可组合函数。',
+      ],
+      points: [
+        '可组合函数可能频繁执行、执行顺序也不固定，副作用应放进 `LaunchedEffect`、`DisposableEffect` 等 API',
+        '状态提升把状态移到调用方，让可组合函数保持无状态，更易于预览和测试',
+        '参数类型稳定时，运行时可以跳过输入没有变化的函数，不对它们重组',
+      ],
+    },
+  },
+  {
+    slug: 'csharp',
+    name: 'C#',
+    category: 'Client',
+    platform: 'Windows',
+    tagline: "Microsoft's statically typed, garbage-collected language for .NET.",
+    understanding: [
+      'C# is an object-oriented language with generics, lambdas, pattern matching and records. It compiles to intermediate language (IL), which the .NET runtime turns into machine code with a just-in-time compiler, or ahead of time with Native AOT.',
+      'LINQ provides query operators over collections and other data sources, and `async`/`await` writes asynchronous code in sequential form. Nullable reference types let the compiler warn about possible null dereferences. It is used for Windows desktop apps, web services with ASP.NET Core, games with Unity, and cross-platform apps.',
+    ],
+    points: [
+      'Value types (`struct`) live inline and are copied on assignment; reference types (`class`) live on the managed heap',
+      '`Span<T>` and `Memory<T>` work on slices of arrays and buffers without copying or allocating',
+      'Source generators produce extra code at compile time, which replaces much of the reflection libraries used to do at run time',
+    ],
+    zh: {
+      tagline: '微软为 .NET 设计的静态类型、带垃圾回收的语言。',
+      understanding: [
+        'C# 是一门面向对象的语言，支持泛型、lambda、模式匹配和 record。它编译成中间语言（IL），再由 .NET 运行时通过即时编译器转成机器码，或者用 Native AOT 提前编译。',
+        'LINQ 为集合和其他数据源提供查询操作，`async`/`await` 让异步代码可以按顺序的写法书写。可空引用类型让编译器对可能的空引用解引用发出警告。它用于 Windows 桌面应用、基于 ASP.NET Core 的 Web 服务、Unity 游戏以及跨平台应用。',
+      ],
+      points: [
+        '值类型（`struct`）内联存放，赋值时复制；引用类型（`class`）存放在托管堆上',
+        '`Span<T>` 和 `Memory<T>` 可以直接操作数组和缓冲区的切片，不复制也不分配',
+        '源代码生成器在编译期生成额外代码，取代了以往许多库在运行时用反射完成的工作',
+      ],
+    },
+  },
+  {
+    slug: 'dotnet',
+    name: '.NET',
+    category: 'Client',
+    platform: 'Windows',
+    tagline: "Microsoft's open-source, cross-platform runtime and class libraries for C#, F# and Visual Basic.",
+    understanding: [
+      '.NET consists of a runtime (the CLR), which loads IL, compiles it to machine code and manages memory with a generational garbage collector, and a base class library covering collections, I/O, networking, threading and more. It runs on Windows, Linux and macOS.',
+      'Projects are built with the `dotnet` CLI and MSBuild, and packages come from NuGet. A new major version ships every November; even-numbered releases are long-term support. On top of it sit ASP.NET Core for the web and, for Windows desktop, WinForms, WPF and the Windows App SDK.',
+    ],
+    points: [
+      'The target framework (for example `net9.0-windows10.0.19041.0`) in the project file decides which APIs and platforms a build can use',
+      'Self-contained publishing bundles the runtime with the app, so the target machine needs no .NET install',
+      'Tiered compilation starts methods with a quick JIT pass and recompiles the frequently called ones with full optimisation',
+    ],
+    zh: {
+      tagline: '微软开源、跨平台的运行时和类库，供 C#、F#、Visual Basic 使用。',
+      understanding: [
+        '.NET 由运行时（CLR）和基础类库组成：CLR 加载 IL、将其编译为机器码，并用分代垃圾回收器管理内存；基础类库覆盖集合、I/O、网络、线程等。它可以运行在 Windows、Linux 和 macOS 上。',
+        '项目用 `dotnet` 命令行和 MSBuild 构建，包来自 NuGet。每年 11 月发布一个大版本，偶数版本为长期支持版本。在它之上有面向 Web 的 ASP.NET Core，以及面向 Windows 桌面的 WinForms、WPF 和 Windows App SDK。',
+      ],
+      points: [
+        '项目文件中的目标框架（例如 `net9.0-windows10.0.19041.0`）决定一次构建能使用哪些 API、面向哪些平台',
+        '独立发布会把运行时和应用打包在一起，目标机器无需安装 .NET',
+        '分层编译先用快速 JIT 编译方法，再对频繁调用的方法以完整优化重新编译',
+      ],
+    },
+  },
+  {
+    slug: 'winui',
+    name: 'WinUI 3',
+    category: 'Client',
+    platform: 'Windows',
+    tagline: 'The native UI framework for Windows desktop apps, shipped in the Windows App SDK.',
+    understanding: [
+      'WinUI 3 is the current Microsoft UI framework for Windows 10 and 11 desktop apps. Interfaces are declared in XAML with code-behind in C# or C++, and its controls follow the Fluent Design System, including materials such as Mica and Acrylic.',
+      'It ships as part of the Windows App SDK, separately from the operating system, so apps get new controls without waiting for a Windows release. Apps can be packaged as MSIX or deployed unpackaged, and it is the UI layer that .NET MAUI uses on Windows.',
+    ],
+    points: [
+      'Data binding with `{x:Bind}` is checked and compiled at build time, unlike the reflection-based `{Binding}`',
+      'Pairing with the MVVM pattern, typically through the CommunityToolkit.Mvvm library, keeps view logic out of the XAML code-behind',
+      'UI elements must be updated on the UI thread; work from background threads is marshalled back through the `DispatcherQueue`',
+    ],
+    zh: {
+      tagline: 'Windows 桌面应用的原生 UI 框架，随 Windows App SDK 发布。',
+      understanding: [
+        'WinUI 3 是微软当前用于 Windows 10 和 11 桌面应用的 UI 框架。界面用 XAML 声明，后台代码用 C# 或 C++ 编写，控件遵循 Fluent Design System，包括 Mica、Acrylic 等材质效果。',
+        '它作为 Windows App SDK 的一部分，独立于操作系统发布，应用无需等待 Windows 更新就能用上新控件。应用可以打包为 MSIX，也可以不打包部署；.NET MAUI 在 Windows 上的界面层也是它。',
+      ],
+      points: [
+        '`{x:Bind}` 数据绑定在构建时检查并编译，不同于基于反射的 `{Binding}`',
+        '配合 MVVM 模式（通常借助 CommunityToolkit.Mvvm 库），可以把视图逻辑移出 XAML 后台代码',
+        'UI 元素只能在 UI 线程上更新；后台线程的工作要通过 `DispatcherQueue` 调度回 UI 线程',
       ],
     },
   },

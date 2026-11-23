@@ -67,6 +67,10 @@ export const UI = {
     'cat.Observability': 'Observability',
     'cat.Client': 'Client',
     'cat.AI': 'AI Tools',
+    'platform.Web': 'Web',
+    'platform.Apple': 'Apple',
+    'platform.Android': 'Android',
+    'platform.Windows': 'Windows',
 
     'edu.section': 'Section II',
     'edu.title': 'Education',
@@ -199,6 +203,10 @@ export const UI = {
     'cat.Observability': '可观测性',
     'cat.Client': '客户端',
     'cat.AI': 'AI 工具',
+    'platform.Web': 'Web',
+    'platform.Apple': 'Apple',
+    'platform.Android': 'Android',
+    'platform.Windows': 'Windows',
 
     'edu.section': '第二版',
     'edu.title': '教育背景',

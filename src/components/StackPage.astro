@@ -1,8 +1,9 @@
 ---
 import TechMark from './TechMark.astro';
+import StackListing from './StackListing.astro';
 import TechDialog from './TechDialog.astro';
-import { TECH } from '../data/tech';
-import { getLangFromUrl, useTranslations, localize } from '../i18n/utils';
+import { TECH, PLATFORMS } from '../data/tech';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
 import { tabsPerRow } from '../lib/tabs';
 
 const lang = getLangFromUrl(Astro.url);
@@ -10,6 +11,12 @@ const t = useTranslations(lang);
 
 const categories = (['Languages', 'Data', 'Infrastructure', 'Observability', 'Client', 'AI'] as const).filter(
   (category) => TECH.some((tech) => tech.category === category),
+);
+
+// Client splits again by platform. Platforms with no entries are left out
+// and appear on their own once one is added.
+const platforms = PLATFORMS.filter((platform) =>
+  TECH.some((tech) => tech.category === 'Client' && tech.platform === platform),
 );
 ---
 
@@ -63,6 +70,7 @@ const categories = (['Languages', 'Data', 'Infrastructure', 'Observability', 'Cl
 
 <!--
   The listing, set as a paper sets its markets table, one category per tab.
+  Client carries a second, nested group of tabs, one per platform.
   Same tab mechanism as the open courseware on Education (see Behaviors).
   The reversed bar is each panel's heading: it is what a reader without
   JavaScript sees above each category, and it goes screen-reader-only once
@@ -105,33 +113,42 @@ const categories = (['Languages', 'Data', 'Infrastructure', 'Observability', 'Cl
             </span>
           </div>
 
-          <ul>
-            {items.map((raw) => {
-              const tech = localize(raw, lang);
-              return (
-                <li data-reveal>
-                  <button
-                    type="button"
-                    data-tech-open={tech.slug}
-                    aria-haspopup="dialog"
-                    class="listing-row cursor-pointer grid-cols-[4rem_1fr] gap-x-4 gap-y-1.5 px-3 py-4 sm:grid-cols-[5rem_13rem_1fr_1rem]"
+          {category === 'Client' ? (
+            <div class="mt-4" data-tabs>
+              <div
+                class="tabs tabs-sub"
+                data-tablist
+                aria-label={t('cat.Client')}
+                style={`--tabs-per-row: ${tabsPerRow(platforms.length)}`}
+              >
+                {platforms.map((platform) => (
+                  <a
+                    id={`stack-tab-client-${platform.toLowerCase()}`}
+                    href={`#stack-client-${platform.toLowerCase()}`}
+                    class="tab"
+                    data-tab={platform.toLowerCase()}
+                    data-astro-reload
                   >
-                    <TechMark slug={tech.slug} class="h-7 w-auto max-w-full" />
+                    {t(`platform.${platform}`)}
+                  </a>
+                ))}
+              </div>
 
-                    <span class="deck-sm">{tech.name}</span>
-
-                    <span class="col-start-2 text-sm leading-snug text-pretty sm:col-start-3">
-                      {tech.tagline}
-                    </span>
-
-                    <span class="hidden text-right text-lg sm:block" aria-hidden="true">
-                      ›
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+              {platforms.map((platform) => (
+                <section
+                  id={`stack-client-${platform.toLowerCase()}`}
+                  data-tab-panel={platform.toLowerCase()}
+                >
+                  <h3 class="kicker border-b border-rule px-3 pt-4 pb-2" data-tab-heading>
+                    {t(`platform.${platform}`)}
+                  </h3>
+                  <StackListing items={items.filter((tech) => tech.platform === platform)} />
+                </section>
+              ))}
+            </div>
+          ) : (
+            <StackListing items={items} />
+          )}
 
           <div class="rule-thin" />
         </section>

@@ -1,0 +1,39 @@
+---
+import TechMark from './TechMark.astro';
+import type { Tech } from '../data/tech';
+import { getLangFromUrl, localize } from '../i18n/utils';
+
+interface Props {
+  items: Tech[];
+}
+
+const lang = getLangFromUrl(Astro.url);
+---
+
+<ul>
+  {Astro.props.items.map((raw) => {
+    const tech = localize(raw, lang);
+    return (
+      <li data-reveal>
+        <button
+          type="button"
+          data-tech-open={tech.slug}
+          aria-haspopup="dialog"
+          class="listing-row cursor-pointer grid-cols-[4rem_1fr] gap-x-4 gap-y-1.5 px-3 py-4 sm:grid-cols-[5rem_13rem_1fr_1rem]"
+        >
+          <TechMark slug={tech.slug} class="h-7 w-auto max-w-full" />
+
+          <span class="deck-sm">{tech.name}</span>
+
+          <span class="col-start-2 text-sm leading-snug text-pretty sm:col-start-3">
+            {tech.tagline}
+          </span>
+
+          <span class="hidden text-right text-lg sm:block" aria-hidden="true">
+            ›
+          </span>
+        </button>
+      </li>
+    );
+  })}
+</ul>

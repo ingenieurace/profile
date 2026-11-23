@@ -26,20 +26,20 @@ const ALIASES: Record<string, string> = {
   go: 'gopher',
   apachekafka: 'kafka-icon',
   linux: 'linux-tux',
-  nodedotjs: 'nodejs-icon',
   typescript: 'typescript-icon',
   mysql: 'mysql-icon',
   docker: 'docker-icon',
-  astro: 'astro-icon',
   codex: 'openai-icon',
   kotlin: 'kotlin-icon',
   huggingface: 'hugging-face-icon',
-  nextjs: 'nextjs-icon',
   tailwindcss: 'tailwindcss-icon',
   // The classic triangle and bolt; 'vite-icon' is the 2025 rebrand, which few readers recognise yet.
   vite: 'vitejs',
   // Neither set carries a SwiftUI mark; it is Swift, so it takes the Swift bird.
   swiftui: 'swift',
+  csharp: 'c-sharp',
+  // Neither set carries a WinUI mark; it is the Windows UI framework, so it takes the Windows logo.
+  winui: 'microsoft-windows-icon',
 };
 
 /**

@@ -132,6 +132,24 @@
     color: var(--paper);
   }
 
+  /*
+    The nested strip (Client's platforms) sits a rank below: hairline base,
+    small caps, and the selected tab underlined rather than reversed, so the
+    two strips never read as one.
+  */
+  .tabs-sub { border-bottom-width: 1px; }
+  .tabs-sub .tab {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .tabs-sub .tab[aria-selected='true'] {
+    background: var(--paper-2);
+    color: var(--ink);
+    box-shadow: inset 0 -3px 0 var(--ink);
+  }
+
   [data-tabs-ready] [data-tab-heading] { @apply sr-only; }
   [data-tab-panel][hidden] { display: none; }
 
