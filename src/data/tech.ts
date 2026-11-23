@@ -10,12 +10,18 @@ export type Platform = (typeof PLATFORMS)[number];
 export interface Tech {
   slug: string;
   name: string;
-  category: 'Languages' | 'Data' | 'Infrastructure' | 'Observability' | 'Client' | 'AI';
+  category: 'Languages' | 'Data' | 'Infrastructure' | 'Observability' | 'Server' | 'Client' | 'Embedded' | 'AI';
   /**
    * Which sub-tab a Client entry sits under on the stack page. Required for
    * Client, ignored elsewhere. Empty platforms are not shown.
    */
   platform?: Platform;
+  /**
+   * A programming language, wherever it is filed. Languages are listed under
+   * the area they are used in, so the front page counts this flag rather than
+   * a category.
+   */
+  language?: true;
   tagline: string;
   understanding: string[];
   points: string[];
@@ -31,7 +37,8 @@ export const TECH: Tech[] = [
   {
     slug: 'go',
     name: 'Go',
-    category: 'Languages',
+    category: 'Server',
+    language: true,
     tagline: 'A compiled language from Google, built around goroutines and a small, stable feature set.',
     understanding: [
       'Go compiles to a single static binary and ships with a garbage collector, a scheduler and a standard library that covers HTTP, JSON, testing and profiling. Goroutines are lightweight threads managed by the runtime; channels pass values between them, and the `sync` package provides mutexes and wait groups.',
@@ -58,7 +65,8 @@ export const TECH: Tech[] = [
   {
     slug: 'rust',
     name: 'Rust',
-    category: 'Languages',
+    category: 'Server',
+    language: true,
     tagline: 'A systems language that checks memory safety at compile time through ownership and borrowing.',
     understanding: [
       'Every value in Rust has one owner, and references to it are checked by the borrow checker: any number of shared references, or exactly one mutable reference, at a time. These rules let the compiler rule out use-after-free, double free and data races without a garbage collector.',
@@ -85,7 +93,8 @@ export const TECH: Tech[] = [
   {
     slug: 'c',
     name: 'C',
-    category: 'Languages',
+    category: 'Embedded',
+    language: true,
     tagline: 'A small, low-level language that maps closely to the machine and underlies most operating systems.',
     understanding: [
       'C exposes memory directly through pointers and leaves allocation and lifetime to the programmer via `malloc` and `free`. Its compiled output is predictable and close to the hardware, and its calling convention is the common interface other languages use to talk to system libraries.',
@@ -110,9 +119,64 @@ export const TECH: Tech[] = [
     },
   },
   {
+    slug: 'stmicroelectronics',
+    name: 'STM32',
+    category: 'Embedded',
+    tagline: "STMicroelectronics' family of 32-bit microcontrollers built on Arm Cortex-M cores.",
+    understanding: [
+      'STM32 is a large family of microcontrollers, from low-power Cortex-M0+ parts to Cortex-M7 and dual-core Cortex-M7/M4 parts running at several hundred megahertz. Each chip combines the core with flash, SRAM and peripherals such as GPIO, timers, ADCs, DMA, UART, SPI, I2C, USB and CAN.',
+      'Firmware is usually written in C. STM32CubeMX generates clock trees, pin assignments and initialisation code, and the HAL and lower-level LL libraries wrap the peripheral registers. Programs run bare-metal or on an RTOS such as FreeRTOS or Zephyr, and are flashed and debugged over SWD with an ST-LINK probe.',
+    ],
+    points: [
+      'Peripherals are driven through memory-mapped registers; the HAL is convenient, and the LL layer or direct register access is used where timing or code size matters',
+      'Interrupts are prioritised by the NVIC, and DMA moves data between peripherals and memory without occupying the CPU',
+      'Low-power modes (Sleep, Stop, Standby) turn off clocks and regulators, and the wake-up sources decide how the chip comes back',
+    ],
+    zh: {
+      tagline: '意法半导体基于 Arm Cortex-M 内核的 32 位微控制器系列。',
+      understanding: [
+        'STM32 是一个庞大的微控制器家族，从低功耗的 Cortex-M0+ 型号，到主频数百兆赫的 Cortex-M7 以及 M7/M4 双核型号。每颗芯片都把内核与闪存、SRAM，以及 GPIO、定时器、ADC、DMA、UART、SPI、I2C、USB、CAN 等外设集成在一起。',
+        '固件通常用 C 编写。STM32CubeMX 生成时钟树、引脚分配和初始化代码，HAL 库和更底层的 LL 库封装了外设寄存器。程序可以裸机运行，也可以运行在 FreeRTOS、Zephyr 等 RTOS 上，通过 ST-LINK 调试器经 SWD 接口烧录和调试。',
+      ],
+      points: [
+        '外设通过内存映射寄存器驱动；HAL 用起来方便，对时序或代码体积有要求时改用 LL 层或直接操作寄存器',
+        '中断优先级由 NVIC 管理，DMA 在外设和内存之间搬运数据，不占用 CPU',
+        '低功耗模式（Sleep、Stop、Standby）会关闭时钟和稳压器，唤醒源决定芯片如何恢复运行',
+      ],
+    },
+  },
+  {
+    slug: 'raspberrypi',
+    name: 'Raspberry Pi',
+    category: 'Embedded',
+    tagline: 'Low-cost single-board computers running Linux, plus the RP2040 and RP2350 microcontrollers.',
+    understanding: [
+      'A Raspberry Pi board carries an Arm system-on-chip from Broadcom, RAM, USB, Ethernet, Wi-Fi and HDMI, and runs a full operating system, usually Raspberry Pi OS, a Debian derivative. The 40-pin header exposes GPIO along with I2C, SPI, UART and PWM, so the board can read sensors and drive hardware directly.',
+      'Its uses range from teaching and home servers to prototypes and industrial controllers; the Compute Module puts the same chip on a board meant to be built into products. The Raspberry Pi Pico line is a separate product: a microcontroller board based on the RP2040 or RP2350, programmed in C/C++ with the Pico SDK or in MicroPython.',
+    ],
+    points: [
+      'Under Linux, GPIO is accessed through the kernel\'s character-device interface, from Python with libraries such as gpiozero',
+      'Linux is not a real-time system; tight timing is handed to hardware peripherals, a Pico or a separate microcontroller',
+      'Running from an SD card wears it out over time; heavy logging and databases are better placed on USB or NVMe storage',
+    ],
+    zh: {
+      tagline: '运行 Linux 的低成本单板计算机，以及 RP2040、RP2350 微控制器。',
+      understanding: [
+        '树莓派板卡上有一颗博通的 Arm 片上系统、内存、USB、以太网、Wi-Fi 和 HDMI，运行完整的操作系统，通常是基于 Debian 的 Raspberry Pi OS。40 针排针引出 GPIO 以及 I2C、SPI、UART、PWM，板子可以直接读取传感器、驱动硬件。',
+        '它的用途从教学、家庭服务器到原型和工业控制器都有；Compute Module 把同样的芯片做成用于嵌入产品的核心板。Raspberry Pi Pico 系列则是另一类产品：基于 RP2040 或 RP2350 的微控制器板，用 Pico SDK 以 C/C++ 编程，或者使用 MicroPython。',
+      ],
+      points: [
+        '在 Linux 下，GPIO 通过内核的字符设备接口访问，Python 中可以用 gpiozero 等库',
+        'Linux 不是实时系统；严格的时序要交给硬件外设、Pico 或单独的微控制器',
+        '长期从 SD 卡运行会磨损卡片；频繁写日志和数据库更适合放在 USB 或 NVMe 存储上',
+      ],
+    },
+  },
+  {
     slug: 'python',
     name: 'Python',
-    category: 'Languages',
+    category: 'Server',
+    language: true,
     tagline: 'A dynamically typed, interpreted language used widely for scripting, data work and machine learning.',
     understanding: [
       'Python has a large standard library and an ecosystem on PyPI that covers web frameworks, automation, scientific computing and machine learning. NumPy, pandas and PyTorch do their heavy work in compiled C, C++ or CUDA code and expose it through Python APIs.',
@@ -464,6 +528,7 @@ export const TECH: Tech[] = [
     slug: 'typescript',
     name: 'TypeScript',
     category: 'Client',
+    language: true,
     platform: 'Web',
     tagline: 'JavaScript with a static type system, compiled away before the code runs.',
     understanding: [
@@ -604,6 +669,7 @@ export const TECH: Tech[] = [
     slug: 'swift',
     name: 'Swift',
     category: 'Client',
+    language: true,
     platform: 'Apple',
     tagline: "Apple's compiled language for iOS, macOS and the other Apple platforms.",
     understanding: [
@@ -688,6 +754,7 @@ export const TECH: Tech[] = [
     slug: 'kotlin',
     name: 'Kotlin',
     category: 'Client',
+    language: true,
     platform: 'Android',
     tagline: 'A JVM language from JetBrains, the preferred language for Android development.',
     understanding: [
@@ -800,6 +867,7 @@ export const TECH: Tech[] = [
     slug: 'csharp',
     name: 'C#',
     category: 'Client',
+    language: true,
     platform: 'Windows',
     tagline: "Microsoft's statically typed, garbage-collected language for .NET.",
     understanding: [

@@ -38,6 +38,7 @@ const ALIASES: Record<string, string> = {
   // Neither set carries a SwiftUI mark; it is Swift, so it takes the Swift bird.
   swiftui: 'swift',
   csharp: 'c-sharp',
+  raspberrypi: 'raspberry-pi',
   // Neither set carries a WinUI mark; it is the Windows UI framework, so it takes the Windows logo.
   winui: 'microsoft-windows-icon',
 };

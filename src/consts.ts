@@ -692,7 +692,7 @@ export const TIMELINE = [
 export const STATS = [
   { key: 'stats.years', value: '3' },
   // Counted from the stack page, so the two cannot disagree.
-  { key: 'stats.languages', value: String(TECH.filter((tech) => tech.category === 'Languages').length) },
+  { key: 'stats.languages', value: String(TECH.filter((tech) => tech.language).length) },
   { key: 'stats.tokens', value: '1B' },
   { key: 'stats.learning', value: '∞' },
 ] as const;
