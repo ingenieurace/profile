@@ -5,23 +5,21 @@ plain HTML, with one small script for the edition toggle and the tech articles.
 
 ## Requirements
 
-Astro 7 needs **Node ≥ 22.12**. There is an `.nvmrc` in the repo root:
+The project runs on [Bun](https://bun.sh) — as package manager and as runtime.
+The version is pinned by `packageManager` in `package.json`.
 
 ```bash
-nvm use
+bun install
 ```
-
-The system default of Node 20 will not run it. `.claude/launch.json` pins the
-absolute path to v22 for the dev and preview servers.
 
 ## Commands
 
 | Command | What it does |
 | --- | --- |
-| `npm run dev` | Dev server on http://localhost:4321 |
-| `npm run build` | Production build into `dist/` |
-| `npm run preview` | Serve the production build locally |
-| `npx astro check` | Type-check, including `.astro` files |
+| `bun run dev` | Dev server on http://localhost:4321 |
+| `bun run build` | Production build into `dist/` |
+| `bun run preview` | Serve the production build locally |
+| `bun run check` | Type-check, including `.astro` files |
 
 ## Sections
 
@@ -160,8 +158,8 @@ Moving to a custom domain later means setting `site` to it, deleting `base`,
 and adding `public/CNAME`. Nothing else has to change — every path already
 goes through `localizePath()` or `withBase()`.
 
-Any other static host works the same way: build command `npm run build`,
-output directory `dist`, Node 22.14.0.
+Any other static host works the same way: build command `bun run build`,
+output directory `dist`, Bun 1.4.5.
 
 ## Notes on the build
 

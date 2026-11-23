@@ -4,9 +4,11 @@ Astro 7 static personal site, styled as a newspaper. All content in English.
 
 ## Environment
 
-**Node ≥ 22.12 is required**; the system default is 20. Run `nvm use` first
-(there is an `.nvmrc`). The dev and preview entries in `.claude/launch.json`
-pin the absolute path to v22.
+The project runs on **Bun** (version pinned by `packageManager` in
+`package.json`), both as package manager and as runtime — the scripts pass
+`--bun` so Astro runs on Bun rather than falling back to Node. Install with
+`bun install`; the lockfile is `bun.lock`. Do not reintroduce npm,
+`package-lock.json` or `.nvmrc`.
 
 ## Structure
 

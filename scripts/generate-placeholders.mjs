@@ -1,6 +1,6 @@
 /**
  * 生成占位封面图。真实作品图到位后可以删掉这个脚本。
- * 用法：node scripts/generate-placeholders.mjs
+ * 用法：bun scripts/generate-placeholders.mjs
  */
 import sharp from 'sharp';
 import { mkdir } from 'node:fs/promises';

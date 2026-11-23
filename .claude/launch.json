@@ -3,18 +3,20 @@
   "configurations": [
     {
       "name": "dev",
-      "runtimeExecutable": "/Users/keynes/.nvm/versions/node/v22.14.0/bin/node",
+      "runtimeExecutable": "bunx",
       "runtimeArgs": [
-        "./node_modules/astro/bin/astro.mjs",
+        "--bun",
+        "astro",
         "dev"
       ],
       "port": 4321
     },
     {
       "name": "preview",
-      "runtimeExecutable": "/Users/keynes/.nvm/versions/node/v22.14.0/bin/node",
+      "runtimeExecutable": "bunx",
       "runtimeArgs": [
-        "./node_modules/astro/bin/astro.mjs",
+        "--bun",
+        "astro",
         "preview",
         "--port",
         "4322"
