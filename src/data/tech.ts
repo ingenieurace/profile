@@ -471,6 +471,33 @@ export const TECH: Tech[] = [
     },
   },
   {
+    slug: 'git',
+    name: 'Git',
+    category: 'Infrastructure',
+    tagline: 'A distributed version control system, the standard way source code is tracked and shared.',
+    understanding: [
+      'Git stores a project\'s history as a graph of commits. Each commit records a snapshot of the whole tree, its author and message, and points to its parent commits; every object is addressed by a hash of its content. Branches and tags are lightweight names that point at commits.',
+      'Every clone carries the full history, so commits, branches, diffs and log searches work offline, and repositories exchange commits with `fetch`, `pull` and `push`. Hosting services such as GitHub and GitLab add pull requests, code review and CI on top. Linus Torvalds wrote it in 2005 for Linux kernel development.',
+    ],
+    points: [
+      'The staging area (index) lets a commit include only some of the changes in the working tree',
+      'Branches combine through `merge`, which records a merge commit, or `rebase`, which replays commits on a new base and rewrites their hashes',
+      '`git reflog` records where HEAD and branches have pointed, which recovers commits after a bad reset or rebase',
+    ],
+    zh: {
+      tagline: '分布式版本控制系统，跟踪和共享源代码的标准方式。',
+      understanding: [
+        'Git 把项目历史保存为一张由提交组成的图。每个提交记录整个目录树的快照、作者和说明，并指向它的父提交；所有对象都按内容的哈希寻址。分支和标签只是指向某个提交的轻量名字。',
+        '每个克隆都包含完整历史，所以提交、分支、diff 和查日志都可以离线完成，仓库之间通过 `fetch`、`pull`、`push` 交换提交。GitHub、GitLab 等托管服务在此之上提供 Pull Request、代码评审和 CI。它由 Linus Torvalds 在 2005 年为 Linux 内核开发而写。',
+      ],
+      points: [
+        '暂存区（index）让一次提交只包含工作区中的部分改动',
+        '分支可以用 `merge` 合并，留下一个合并提交；也可以用 `rebase` 把提交重放到新的基点上，这会改写它们的哈希',
+        '`git reflog` 记录 HEAD 和各分支曾经指向的位置，误操作 reset 或 rebase 后可以借此找回提交',
+      ],
+    },
+  },
+  {
     slug: 'typescript',
     name: 'TypeScript',
     category: 'Client',

@@ -29,6 +29,7 @@ const ALIASES: Record<string, string> = {
   typescript: 'typescript-icon',
   mysql: 'mysql-icon',
   docker: 'docker-icon',
+  git: 'git-icon',
   codex: 'openai-icon',
   kotlin: 'kotlin-icon',
   huggingface: 'hugging-face-icon',
